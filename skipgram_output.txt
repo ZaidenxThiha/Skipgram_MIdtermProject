@@ -1,0 +1,50 @@
+Task 1.4
+Vocabulary:
+['and', 'are', 'cat', 'city', 'day', 'dog', 'every', 'floor', 'friends', 'he', 'her', 'his', 'is', 'leads', 'loves', 'mat', 'on', 'ran', 'road', 'sat', 'she', 'the', 'to', 'together', 'walk', 'walks']
+Vocabulary size: 26
+Training pairs count: 136
+Unique ordered pair types: 108
+
+Task 2.1
+Verification with seed=42, d=3, pair=('cat','sat')
+v_cat = [ 0.1579  0.0767 -0.0469]
+score('sat') = -0.0080
+P(sat | cat) = 0.0382
+loss = 3.2650
+
+Task 2.2
+Verification with seed=0, d=10, center='the'
+y_hat.sum() = 1.0000000000
+max(y_hat) = 0.0384816708
+
+Task 2.3
+Manual backward verification
+error[sat] = -0.9618
+updated v_cat = [ 0.1625  0.0609 -0.0425]
+updated W_out[:, sat] = [ 0.0413 -0.1328  0.0252]
+grad_v_cat = [-0.0457  0.1588 -0.0446]
+grad_W_out[:, sat] = [-0.1519 -0.0738  0.0452]
+
+Task 2.4
+Gradient check passed = True
+W_in(21, 4): analytical=-0.00137136, numerical=-0.00137136, rel_error=4.446e-10
+W_in(21, 0): analytical=0.00530955, numerical=0.00530955, rel_error=1.546e-09
+W_in(21, 7): analytical=-0.00944378, numerical=-0.00944378, rel_error=1.317e-09
+W_in(21, 5): analytical=0.00382089, numerical=0.00382089, rel_error=2.136e-09
+W_in(21, 8): analytical=0.02060995, numerical=0.02060995, rel_error=4.532e-10
+W_out(1, 0): analytical=0.00012191, numerical=0.00012191, rel_error=1.143e-08
+W_out(1, 15): analytical=0.00012200, numerical=0.00012200, rel_error=3.096e-08
+W_out(9, 0): analytical=-0.00001624, numerical=-0.00001624, rel_error=7.332e-07
+W_out(0, 15): analytical=0.00035004, numerical=0.00035004, rel_error=1.994e-09
+W_out(9, 19): analytical=-0.00001626, numerical=-0.00001626, rel_error=5.930e-07
+
+Task 3.1
+Training checkpoints
+epoch 10: 3.2573
+epoch 50: 2.5728
+epoch 100: 2.0418
+
+Task 3.3
+Hyperparameter experiments
+d=20 -> epoch50=2.5269, epoch100=1.9739
+fixed lr=0.05 -> epoch50=2.0151, epoch100=1.8873
