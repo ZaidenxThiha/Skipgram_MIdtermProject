@@ -33,6 +33,7 @@ skipgram.py
 evaluate.py
 - Evaluation script for Part 4.
 - Computes cosine similarities, nearest neighbors, Gensim comparison, and Spearman rank correlation.
+- Prints an extended Task 4.3 comparison table with custom scores, Gensim scores, rank positions, Spearman rho, p-value, and two technical differences.
 
 loss_curve.png
 - Training loss figure produced by skipgram.py.
@@ -53,6 +54,7 @@ Required packages:
 - matplotlib
 - gensim
 - scipy
+- argparse
 
 4. Setup
 Create and activate a virtual environment:
@@ -87,7 +89,13 @@ This script will:
 - train a Gensim Skip-gram model on the same corpus
 - compare custom similarities with Gensim similarities
 - compute Spearman rho and p-value
+- print an extended similarity table for Task 4.3 with custom rank and Gensim rank columns
 - print outputs grouped by task
+
+Part 4 summary:
+- Task 4.1 evaluates semantic similarity using cosine similarity on the learned W_in embeddings.
+- Task 4.2 retrieves top-3 nearest neighbors for the required query words using cosine similarity.
+- Task 4.3 compares the custom model against Gensim, reports Spearman rho and p-value, and explains differences due to full softmax vs negative sampling and different training internals.
 
 6. Expected generated outputs
 After running skipgram.py:
