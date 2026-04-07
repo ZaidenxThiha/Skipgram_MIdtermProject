@@ -108,3 +108,6 @@ After running evaluate.py:
 If you want to save the outputs to text files:
 python skipgram.py --output-dir . | tee skipgram_output.txt
 python evaluate.py --output-dir . | tee evaluate_output.txt
+
+Important compatibility note:
+- Use Python 3.12 for this project. On Python 3.14, Gensim may fail to build or import.

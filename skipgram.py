@@ -229,7 +229,8 @@ def top_k_neighbors(model: SkipGram, word: str, word2idx: dict[str, int], idx2wo
 
 def plot_losses(losses: list[float], output_path: Path) -> None:
     plt.figure(figsize=(8, 4))
-    plt.plot(range(1, 101), losses, color="navy", lw=1.5, label="Avg. loss")
+    epochs = len(losses)
+    plt.plot(range(1, epochs + 1), losses, color="navy", lw=1.5, label="Avg. loss")
     for epoch, color in ((10, "orange"), (50, "green"), (100, "red")):
         plt.axvline(
             epoch,
@@ -243,7 +244,7 @@ def plot_losses(losses: list[float], output_path: Path) -> None:
     plt.title("Skip-gram Training Loss Curve (d=10, W=2, η₀=0.025)")
     plt.legend()
     plt.tight_layout()
-    plt.savefig(output_path, dpi=150)
+    plt.savefig(output_path, dpi=300)
     plt.close()
 
 
@@ -333,8 +334,9 @@ def print_summary(results: dict[str, object]) -> None:
     print("Vocabulary:")
     print(vocab)
     print(f"Vocabulary size: {len(vocab)}")
-    print(f"Training pairs count: {len(pairs)}")
-    print(f"Unique ordered pair types: {len(unique_pairs)}")
+    print(f"Directed training pairs generated with W=2: {len(pairs)}")
+    print(f"Unique ordered pair types with W=2: {len(unique_pairs)}")
+    print("Note: the PDF's stated expectation of 270 pairs is not reproducible from the fixed 8-sentence corpus with a symmetric window size of 2.")
     print()
 
     print("Task 2.1")
@@ -376,9 +378,20 @@ def print_summary(results: dict[str, object]) -> None:
     print()
 
     print("Task 3.3")
-    print("Hyperparameter experiments")
-    print(f"d=20 -> epoch50={experiments['dim20'][49]:.4f}, epoch100={experiments['dim20'][99]:.4f}")
-    print(f"fixed lr=0.05 -> epoch50={experiments['fixed_lr'][49]:.4f}, epoch100={experiments['fixed_lr'][99]:.4f}")
+    print("Hyperparameter comparison")
+    print(f"{'Setting':<18} {'Loss@50':>10} {'Loss@100':>10}  Observation")
+    print(
+        f"{'baseline d=10':<18} {losses[49]:>10.4f} {losses[99]:>10.4f}  "
+        "Reference run with decay schedule."
+    )
+    print(
+        f"{'d=20':<18} {experiments['dim20'][49]:>10.4f} {experiments['dim20'][99]:>10.4f}  "
+        "Lower final loss, but each update is heavier because the embedding size is doubled."
+    )
+    print(
+        f"{'fixed lr=0.05':<18} {experiments['fixed_lr'][49]:>10.4f} {experiments['fixed_lr'][99]:>10.4f}  "
+        "Still converges here, but the larger constant step keeps the run less stable than the decayed baseline."
+    )
 
 
 def main() -> None:

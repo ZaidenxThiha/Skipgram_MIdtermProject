@@ -2,8 +2,9 @@ Task 1.4
 Vocabulary:
 ['and', 'are', 'cat', 'city', 'day', 'dog', 'every', 'floor', 'friends', 'he', 'her', 'his', 'is', 'leads', 'loves', 'mat', 'on', 'ran', 'road', 'sat', 'she', 'the', 'to', 'together', 'walk', 'walks']
 Vocabulary size: 26
-Training pairs count: 136
-Unique ordered pair types: 108
+Directed training pairs generated with W=2: 136
+Unique ordered pair types with W=2: 108
+Note: the PDF's stated expectation of 270 pairs is not reproducible from the fixed 8-sentence corpus with a symmetric window size of 2.
 
 Task 2.1
 Verification with seed=42, d=3, pair=('cat','sat')
@@ -45,41 +46,8 @@ epoch 50: 2.5728
 epoch 100: 2.0418
 
 Task 3.3
-Hyperparameter experiments
-d=20 -> epoch50=2.5269, epoch100=1.9739
-fixed lr=0.05 -> epoch50=2.0151, epoch100=1.8873
-
-Task 4.1
-Cosine similarities using trained W_in embeddings (sorted)
-Word Pair              Cosine  Interpretation
-('city', 'road')       0.9167  strong similarity; they are linked by 'the road leads to the city'
-('cat', 'mat')         0.4732  moderate similarity; they co-occur directly in 'the cat sat on the mat'
-('cat', 'road')        0.4628  moderate similarity; they never appear together, so similarity should stay low
-('friends', 'walk')     0.3705  moderate similarity; they are semantically linked by the last sentence
-('dog', 'road')        0.2431  moderate similarity; they appear together in the road sentence
-('cat', 'dog')         0.1687  weak similarity; both are common household animals in the corpus
-
-Task 4.2
-Top-3 nearest neighbors from trained W_in embeddings
-Query      Top-3 Neighbors                               Linguistic Observation
-cat        she (0.6782), sat (0.6111), floor (0.5971)    Nearest words are she, sat, floor. This mix shows one clear contextual match ('sat') plus some noisy neighbors, which is expected on a tiny corpus.
-dog        he (0.6300), are (0.5929), ran (0.3991)       Nearest words are he, are, ran. These are driven by shared local windows around dog, including subject-like and action-related contexts.
-city       road (0.9167), leads (0.8927), floor (0.8614) Nearest words are road, leads, floor. Road-related neighbors are expected because city appears only once and is tied closely to 'road' and 'leads'. With such a tiny corpus, rare words often inherit narrow local structure.      
-friends    every (0.7616), walks (0.7439), day (0.6420)  Nearest words are every, walks, day. Neighbors tend to reflect the final sentence and the earlier 'cat and the dog are friends' sentence. Words linked to social or motion contexts are reasonable here.
-
-Task 4.3
-Extended similarity comparison with Gensim and rank positions
-Word Pair              Custom     Gensim   C-Rank   G-Rank
-('cat', 'dog')         0.1687    -0.3895        6        6
-('cat', 'mat')         0.4732     0.0566        2        3
-('cat', 'road')        0.4628     0.1066        3        2
-('dog', 'road')        0.2431     0.0249        5        4
-('city', 'road')       0.9167     0.1407        1        1
-('friends', 'walk')     0.3705    -0.0869        4        5
-
-Spearman rho = 0.8857
-p-value = 0.0188
-
-Technical differences
-1. The custom model uses full-softmax cross-entropy, while Gensim Skip-gram uses negative sampling by default.
-2. Gensim includes optimized training internals and a different update procedure, so embeddings will not numerically match even with the same corpus and seed.
+Hyperparameter comparison
+Setting               Loss@50   Loss@100  Observation
+baseline d=10          2.5728     2.0418  Reference run with decay schedule.
+d=20                   2.5269     1.9739  Lower final loss, but each update is heavier because the embedding size is doubled.
+fixed lr=0.05          2.0151     1.8873  Still converges here, but the larger constant step keeps the run less stable than the decayed baseline.
